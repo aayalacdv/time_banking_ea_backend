@@ -94,6 +94,7 @@ export async function loginHandler(req: Request, res: Response) {
     //respond with user and tokens
     res.status(200).send({
       message: "Logged in correctly",
+       ...user
     });
   } else {
     res.status(403).send({ message: "Error user or password missmatch" });
@@ -120,10 +121,7 @@ export async function logOutHandler(req: Request, res: Response){
 
 
 export async function testingHandler(req: Request, res: Response) {
-  //@ts-ignore
-  const user = req.user;
-
-  res.json(user).status(200);
+ res.json({ message : "it works"}).status(200); 
 }
 export async function testingHandler2(req: Request, res: Response) {
   //@ts-ignore

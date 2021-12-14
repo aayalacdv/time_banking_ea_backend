@@ -6,15 +6,16 @@ import {
 } from "../src/controller/user.controller";
 import { deserializeUser } from '../src/middleware/deserializeUser';
 import userRouter from './user.routes';
+import servicerouter from './service.routes'; 
 
 export function routes(app: Express) {
 
   
-  app.use('/api', userRouter); 
+  app.use('/api/user', userRouter); 
   
+  app.use('/api/services',servicerouter);
   //testing purposes 
-  app.get("/api/testing",deserializeUser, testingHandler); 
-  app.get("/api/testing2",deserializeUser, testingHandler2); 
+  app.get("/api/testing", testingHandler); 
   
   
 }

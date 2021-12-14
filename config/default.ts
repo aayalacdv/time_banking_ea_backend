@@ -1,7 +1,7 @@
 export default {
-  host: "0.0.0.0",
+  host: "localhost",
   port: 8080,
-  dbUri: "mongodb://mongo:27017/timeBanking",
+  dbUri: "mongodb://localhost:27017/timeBanking",
   saltFactor: 10,
   privateKey: `MIICWwIBAAKBgH17vgXF4iwtgKppKl1zEl+ESSn5tqA493X0104vNkc+KpXPK8L6
     4W7uvVSzCtIPOMDy8gNhcgt3pf46wz+b0QgTcF1nN8pj5F01P8WZfJHhKrgHKUlO

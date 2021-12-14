@@ -7,28 +7,28 @@ import { userSchema } from '../src/schemas/user.schema';
 const router = Router();  
 
 //Get all users
-router.get("/user", getAllUsersHandler);
+router.get("/", getAllUsersHandler);
 
 //Create a user
-router.post("/user", validateUser(userSchema),createUserHandler);
+router.post("/", validateUser(userSchema),createUserHandler);
 
 //login user
-router.post("/user/login",validateUser(userSchema),loginHandler); 
+router.post("/login",loginHandler); 
   
 //Get user by Id
-router.get("/user/:id", getUserByIdHandler);
+router.get("/:id", getUserByIdHandler);
 
 
 //Operations requiring user
 router.use(requeriesUser); 
 
 //Logout User
-router.delete("/user/logout",logOutHandler);
+router.delete("/logout",logOutHandler);
 
 //Update user by Id
-router.put("/user/:id", validateUser(userSchema),updateUserHandler);
+router.put("/:id", validateUser(userSchema),updateUserHandler);
 
 //Delete user by Id
-router.delete("/user/:id", deleteUserByIdHandler);
+router.delete("/:id", deleteUserByIdHandler);
 
 export default router; 

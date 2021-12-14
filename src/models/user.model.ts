@@ -1,4 +1,5 @@
-import { Document, Schema, model } from "mongoose";
+import { Service } from './service.model';
+import { Document, Schema, model, SchemaTypes } from "mongoose";
 import log from "../logging/logger";
 import bcrypt from "bcrypt";
 import config from "config";
@@ -7,6 +8,8 @@ export interface IUser extends Document {
   username: string;
   password: string;
   email: string;
+  services: Service['_id'][]; 
+  time : number,
   createdAt : Date; 
   updatedAt : Date; 
   comparePasswords(candidatePassword : string ) : Promise<boolean>; 
@@ -17,6 +20,8 @@ const userSchema = new Schema<IUser>(
 
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
+    services : [{ type : SchemaTypes.ObjectId, ref: 'Service'}],
+    time: { type : Number, default: 0},
     password: { type: String, required: true },
   },
   {
@@ -34,6 +39,7 @@ userSchema.pre<IUser>("save", function (next) {
 
   const hash: string = bcrypt.hashSync(user.password, saltFactor);
   this.password = hash;
+  this.time = 24; 
   next();
 });
 
