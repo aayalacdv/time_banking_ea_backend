@@ -1,11 +1,9 @@
 export default {
-
-    host : "localhost", 
-    port: 8080, 
-    dbUri: "mongodb://localhost:27017/timeBanking",
-    saltFactor: 10,
-    privateKey :
-    `MIICWwIBAAKBgH17vgXF4iwtgKppKl1zEl+ESSn5tqA493X0104vNkc+KpXPK8L6
+  host: "0.0.0.0",
+  port: 8080,
+  dbUri: "mongodb://mongo:27017/timeBanking",
+  saltFactor: 10,
+  privateKey: `MIICWwIBAAKBgH17vgXF4iwtgKppKl1zEl+ESSn5tqA493X0104vNkc+KpXPK8L6
     4W7uvVSzCtIPOMDy8gNhcgt3pf46wz+b0QgTcF1nN8pj5F01P8WZfJHhKrgHKUlO
     Cd3Uy0x+rF2nC66m0qt4DSkFsOTISIo+0QIm9sms7vIN7zBpRjd48xy/AgMBAAEC
     gYAVQUmdtrgp3YdG1kt7yssY7NJrzsWVfDDGhTOXJb4e8TPLbm0uOMrIvJ3LZAx4
@@ -17,9 +15,8 @@ export default {
     OVlfBqVh8p9GeeZjyHSiHBxZ1sFVlQamMsV9vHBS12eWqInbQrV1io+lAkEAkyBf
     Q+dGIgWQKKOlfQg5vZHUfT88fNd/XgakFDG9r4ufsqF9lPCPOWOc1w/geQaR4jpU
     OnJ0QGoVZZCcCRNS0QJAKqeSl9kfcS6GPOGcKGgmux8M3DZcLjGPlACou4+iGwe1
-    PcG68gMkGhlhmVEilQLWkAujSCzBKr0MeE5mnY0Esg==`, 
-    accesTokenExpirationTime: '1m', 
-    refreshTokenExpirationTime: '5m', 
+    PcG68gMkGhlhmVEilQLWkAujSCzBKr0MeE5mnY0Esg==`,
+  accesTokenExpirationTime: "10m",
+  refreshTokenExpirationTime: "1y",
+};
 
-
-}
