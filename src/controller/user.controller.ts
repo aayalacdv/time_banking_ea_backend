@@ -11,7 +11,7 @@ import {
 } from "../services/user.service";
 import { Request, Response } from "express";
 import { IUser } from "../models/user.model";
-import { omit } from "lodash";
+import { get, omit } from "lodash";
 import { createAccesToken, createRefreshToken } from "../jwtUtils/jwtWrapper";
 import { createSession, invalidateSession} from "../services/session.service";
 import log from "../logging/logger";
@@ -100,6 +100,44 @@ export async function loginHandler(req: Request, res: Response) {
     res.status(403).send({ message: "Error user or password missmatch" });
   }
 }
+
+export async function googleLoginHandler(req: Request, res: Response){
+  if(!req.user) return { message: 'this is the redirect url '}; 
+
+  //@ts-ignore
+  const email = get(req.user,'emails[0].value'); 
+  
+  const user: any = await findUserByEmail(email);
+    log.debug(user);
+    const session: any = await createSession(user._id);
+
+    //create both access and refresh token
+    const accessToken = await createAccesToken(
+      user as IUser,
+      session as ISession
+    );
+    const refreshToken = createRefreshToken(session as ISession);
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      maxAge: 300000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 600000,
+    });
+
+    //respond with user and tokens
+    res.status(200).send({
+      message: "Logged in correctly",
+       ...user
+    });
+  
+
+}
+
+
 
 
 export async function logOutHandler(req: Request, res: Response){

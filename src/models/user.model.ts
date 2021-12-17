@@ -8,6 +8,7 @@ export interface IUser extends Document {
   username: string;
   password: string;
   email: string;
+  googleId: string; 
   services: Service['_id'][]; 
   time : number,
   createdAt : Date; 
@@ -20,6 +21,7 @@ const userSchema = new Schema<IUser>(
 
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
+    googleId: { type: String, required: false, unique: true},
     services : [{ type : SchemaTypes.ObjectId, ref: 'Service'}],
     time: { type : Number, default: 0},
     password: { type: String, required: true },

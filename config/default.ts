@@ -18,5 +18,9 @@ export default {
     PcG68gMkGhlhmVEilQLWkAujSCzBKr0MeE5mnY0Esg==`,
   accesTokenExpirationTime: "10m",
   refreshTokenExpirationTime: "1y",
+  client_id:"97299685814-ogthgmf46btm6juutkda9pspuu4l0fv4.apps.googleusercontent.com",
+  client_secret: "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",
+
 };
+
 
