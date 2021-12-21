@@ -1,0 +1,1 @@
+Bona tarda Toni, Del meu exercici he realitzat la part de frontend, he creat la finestra, relacionarla amb el propi projecte, crear la llista amb continguts. Del backend, he creat el models que es necesita per dur a terme aquesta funció.
