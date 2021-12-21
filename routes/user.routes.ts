@@ -1,5 +1,5 @@
 import { Router } from 'express'; 
-import { createUserHandler, deleteUserByIdHandler, getAllUsersHandler, getUserByIdHandler, googleLoginHandler, loginHandler, logOutHandler, updateUserHandler } from '../src/controller/user.controller';
+import { createUserHandler, deleteUserByIdHandler, getAllUsersHandler, getGlobalUser, getUserByIdHandler, googleLoginHandler, loginHandler, logOutHandler, updateUserHandler } from '../src/controller/user.controller';
 import { requeriesUser } from '../src/middleware/requiresUser';
 import { validateUser } from '../src/middleware/user.validate';
 import { userSchema } from '../src/schemas/user.schema';
@@ -11,6 +11,8 @@ const router = Router();
 router.get('/auth',passport.authenticate('google', { scope: ['profile', 'email'] }), googleLoginHandler); 
 //Get all users
 router.get("/", getAllUsersHandler);
+
+router.get("/global", getGlobalUser); // *
 
 //Create a user
 router.post("/", validateUser(userSchema),createUserHandler);

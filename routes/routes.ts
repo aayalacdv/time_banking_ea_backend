@@ -17,7 +17,7 @@ export function routes(app: Express) {
 
   app.get('/failure', (req,  res) => res.json({ failure: "something went wrong"}));
 
-  app.use("/api/user", userRouter);
+  app.use("/api/user", userRouter);//*
 
   app.use("/api/services", servicerouter);
   //testing purposes

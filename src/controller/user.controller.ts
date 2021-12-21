@@ -8,6 +8,7 @@ import {
   getUsers,
   updateUser,
   validatePassword,
+  getGlobal,
 } from "../services/user.service";
 import { Request, Response } from "express";
 import { IUser } from "../models/user.model";
@@ -20,6 +21,12 @@ export async function getAllUsersHandler(req: Request, res: Response) {
   const users: any = await getUsers();
   const response = users.map((user: any) => omit(user.toJSON(), "password"));
   res.status(200).json(response);
+}
+
+export async function getGlobalUser(req: Request, res: Response) { //*
+  const users: any = await getGlobal();
+  const response = users;
+  res.status(200).json(response); 
 }
 
 export async function getUserByIdHandler(req: Request, res: Response) {

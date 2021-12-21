@@ -57,6 +57,10 @@ export async function getUsers() {
   });
 }
 
+export async function getGlobal() { //Servicio que me devuelve la tabla de los usuarios globales
+  return (await User.find()).length;
+}
+
 //get userbyemail
 export async function findUserByEmail(email: string) {
   return User.findOne({ email: email })
