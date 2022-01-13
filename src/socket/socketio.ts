@@ -13,7 +13,6 @@ let http = require("http").Server(app);
 let io = require("socket.io")(http);
 
 var usersC: Array<UserC> =[];
-var userDisconnected = false;
 
 //We register a middleware which checks the username and allows the connection
 io.use((socket: any, next:any) => {
@@ -47,6 +46,15 @@ io.on("connection", function(socket: any) {
   //Emit to all the sockets connected
   io.emit("user connected", usersC);
  
+  socket.join(socket.username);
+
+  socket.on("msg",(data:any) =>{
+    console.log("Sender:" + data["sender"]);
+    console.log("Receiver:" + data["receiver"]);
+    console.log("Msg:" + data["message"]);
+
+    socket.to(data["receiver"]).emit("msg",data);
+  });
 
   socket.on('bye', function(){
 
