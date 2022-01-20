@@ -38,16 +38,17 @@ const io = require("socket.io")(httpServer);
 
 
 io.on("connection", (socket: any) => {
-    console.log("Socket ID "+socket.id);
 
-    socket.on("room", (room: any)=> {
-        socket.join(room);
-        console.log("Has entrado en las publicaciones de "+room);
+    console.log("Socket ID: "+socket.id);
+
+    socket.on("room", (data: any)=> {
+        socket.join(data["room"]);
+        console.log("Has entrado en las publicaciones de "+data["room"]);
     });
 
-    socket.on("message", (data: any) => {
-       console.log("Room:+ "+data["room"]);
-        console.log("Room:+ "+data["message"]);
+    socket.on("room msg", (data:any) => {
+        console.log(data);
+       socket.to(data["room"]).emit("room msg",data);
     });
 
 });
