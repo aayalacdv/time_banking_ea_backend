@@ -1,14 +1,14 @@
 import { Router } from 'express'; 
-import { createUserHandler, deleteUserByIdHandler, getAllUsersHandler, getUserByIdHandler, googleLoginHandler, loginHandler, logOutHandler, updateUserHandler } from '../src/controller/user.controller';
+import { createUserHandler, deleteUserByIdHandler, getAllUsersHandler, getUserByIdHandler,updateProfilePictureHandler ,googleAuthHandler, loginHandler, logOutHandler, updateUserHandler } from '../src/controller/user.controller';
 import { requeriesUser } from '../src/middleware/requiresUser';
 import { validateUser } from '../src/middleware/user.validate';
 import { userSchema } from '../src/schemas/user.schema';
-import passport from 'passport';
+import upload from '../src/multer/multer.setup';
 
 const router = Router();  
 
 
-router.get('/auth',passport.authenticate('google', { scope: ['profile', 'email'] }), googleLoginHandler); 
+router.post('/google', googleAuthHandler); 
 //Get all users
 router.get("/", getAllUsersHandler);
 
@@ -29,7 +29,8 @@ router.use(requeriesUser);
 router.delete("/logout",logOutHandler);
 
 //Update user by Id
-router.put("/:id", validateUser(userSchema),updateUserHandler);
+router.put("/:id", updateUserHandler);
+router.put("/profilepic/:id", upload.single('profilePicture'), updateProfilePictureHandler );
 
 //Delete user by Id
 router.delete("/:id", deleteUserByIdHandler);

@@ -11,6 +11,7 @@ export interface IUser extends Document {
   googleId: string; 
   services: Service['_id'][]; 
   time : number,
+  imageUrl: string;
   createdAt : Date; 
   updatedAt : Date; 
   comparePasswords(candidatePassword : string ) : Promise<boolean>; 
@@ -24,7 +25,8 @@ const userSchema = new Schema<IUser>(
     googleId: { type: String, required: false, unique: true},
     services : [{ type : SchemaTypes.ObjectId, ref: 'Service'}],
     time: { type : Number, default: 0},
-    password: { type: String, required: true },
+    password: { type: String, required: false},
+    imageUrl: { type: String, required: false, unique: true},
   },
   {
     timestamps: true,

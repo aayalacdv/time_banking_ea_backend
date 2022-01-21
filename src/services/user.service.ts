@@ -16,7 +16,7 @@ export async function createUserFromGoogle(
 ) {
   //encontramos si existe un usuario con el mismo googleid
 
-  const found = (await User.findOne({ googleId: googleId }).catch(
+  const found = (await User.findOne({ googleId: googleId }).lean().catch(
     (error: any) => {
       log.error("Error finding user");
     }
@@ -30,7 +30,7 @@ export async function createUserFromGoogle(
     }).catch((error) => {
       log.error("Error creating user from google");
     });
-  return;
+  return found;
 }
 
 
@@ -68,7 +68,7 @@ export async function findUserByEmail(email: string) {
 
 //modify user
 export async function updateUser(id: string, user: IUser) {
-  return User.findByIdAndUpdate(id, user, { new: true }).catch((error: any) => {
+  return User.findByIdAndUpdate(id, user, { new: true }).lean().catch((error: any) => {
     log.error("Error updating user");
   });
 }
@@ -81,3 +81,4 @@ export async function validatePassword(email: string, password: string) {
   if (valid) return true;
   return false;
 }
+

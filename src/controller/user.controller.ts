@@ -8,12 +8,14 @@ import {
   getUsers,
   updateUser,
   validatePassword,
+  createUserFromGoogle,
 } from "../services/user.service";
 import { Request, Response } from "express";
 import { IUser } from "../models/user.model";
 import { get, omit } from "lodash";
 import { createAccesToken, createRefreshToken } from "../jwtUtils/jwtWrapper";
-import { createSession, invalidateSession} from "../services/session.service";
+import { createSession, invalidateSession } from "../services/session.service";
+import cookie from "cookie";
 import log from "../logging/logger";
 
 export async function getAllUsersHandler(req: Request, res: Response) {
@@ -47,6 +49,7 @@ export async function deleteUserByIdHandler(req: Request, res: Response) {
 export async function updateUserHandler(req: Request, res: Response) {
   const id = req.params.id;
   const user = req.body as IUser;
+
   const updated: any = await updateUser(id, user);
   if (updated !== undefined) {
     res.status(200).json(omit(updated.toJSON(), "password"));
@@ -54,6 +57,21 @@ export async function updateUserHandler(req: Request, res: Response) {
     res.status(404).send({ message: "User not found" });
   }
 }
+
+
+export async function updateProfilePictureHandler( req: Request, res: Response){
+  const id = req.params.id;
+  //@ts-ignore
+  let user : IUser = await findUserByEmail(req.user.email);
+  if(user) user.imageUrl = req.file?.filename as string;
+  const updated = await updateUser(id,user);
+
+
+  return res.status(200).send({ user : {...updated}});
+
+}
+
+
 
 export async function createUserHandler(req: Request, res: Response) {
   const user = req.body as IUser;
@@ -81,85 +99,67 @@ export async function loginHandler(req: Request, res: Response) {
     );
     const refreshToken = createRefreshToken(session as ISession);
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      maxAge: 300000,
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 600000,
-    });
-
+    let cookies: any[] = [];
+    cookies.push(serializeCookie("accessToken", accessToken, 300000));
+    cookies.push(serializeCookie("refreshToken", refreshToken, 600000));
+    res.header("Set-Cookie", cookies);
+    
     //respond with user and tokens
     res.status(200).send({
       message: "Logged in correctly",
-       ...user
+      ...user,
     });
   } else {
     res.status(403).send({ message: "Error user or password missmatch" });
   }
 }
 
-export async function googleLoginHandler(req: Request, res: Response){
-  if(!req.user) return { message: 'this is the redirect url '}; 
+export async function googleAuthHandler(req: Request, res: Response) {
+  const {email,name, googleId} = req.body; 
 
-  //@ts-ignore
-  const email = get(req.user,'emails[0].value'); 
-  
-  const user: any = await findUserByEmail(email);
-    log.debug(user);
-    const session: any = await createSession(user._id);
+  let user: any = await createUserFromGoogle(name,googleId,email);
 
-    //create both access and refresh token
-    const accessToken = await createAccesToken(
-      user as IUser,
-      session as ISession
-    );
-    const refreshToken = createRefreshToken(session as ISession);
+  const session: any = await createSession(user._id);
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      maxAge: 300000,
-    });
+  //create both access and refresh token
+  const accessToken = await createAccesToken(
+    user as IUser,
+    session as ISession
+  );
+  const refreshToken = createRefreshToken(session as ISession);
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 600000,
-    });
 
-    //respond with user and tokens
-    res.status(200).send({
-      message: "Logged in correctly",
-       ...user
-    });
-  
+  let cookies: any[] = [];
+  cookies.push(serializeCookie("accessToken", accessToken, 300000));
+  cookies.push(serializeCookie("refreshToken", refreshToken, 600000));
+  res.header("Set-Cookie", cookies);
 
+  res.status(200).send({
+    message: "Logged in correctly",
+    ...user,
+  });
 }
 
-
-
-
-export async function logOutHandler(req: Request, res: Response){
+export async function logOutHandler(req: Request, res: Response) {
   //@ts-ignore
-  const invalidated : any = await invalidateSession(req.user.session); 
-  res.cookie("accessToken", '', {
+  const invalidated: any = await invalidateSession(req.user.session);
+  res.cookie("accessToken", "", {
     httpOnly: true,
     maxAge: 0,
   });
 
-  res.cookie("refreshToken", '', {
+  res.cookie("refreshToken", "", {
     httpOnly: true,
     maxAge: 0,
   });
 
-  res.status(200).send({ message: "Logged out correctly", session: invalidated._id}); 
-
+  res
+    .status(200)
+    .send({ message: "Logged out correctly", session: invalidated._id });
 }
-
 
 export async function testingHandler(req: Request, res: Response) {
- res.json({ message : "it works"}).status(200); 
+  res.json({ message: "it works" }).status(200);
 }
 export async function testingHandler2(req: Request, res: Response) {
   //@ts-ignore
@@ -167,3 +167,9 @@ export async function testingHandler2(req: Request, res: Response) {
 
   res.json({ ...user, lavidaesdura: true }).status(200);
 }
+
+var serializeCookie = function (key: string, value: string, time: number) {
+  // This is res.cookie’s code without the array management and also ignores signed cookies.
+  return cookie.serialize(key, value, { maxAge: time, httpOnly: true });
+};
+

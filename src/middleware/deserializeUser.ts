@@ -6,6 +6,7 @@ import {
   decodeToken,
   verifyToken,
 } from "../jwtUtils/jwtWrapper";
+import log from "../logging/logger";
 import {
   findSessionById,
   invalidateSession,
@@ -17,6 +18,7 @@ export async function deserializeUser(
   res: Response,
   next: NextFunction
 ) {
+
   //get the access token
   const { accessToken } = req.cookies;
 
