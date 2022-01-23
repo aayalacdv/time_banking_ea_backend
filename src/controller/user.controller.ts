@@ -8,6 +8,9 @@ import {
   getUsers,
   updateUser,
   validatePassword,
+  getAllReports,
+  createNewReport,
+  getGlobal,
 } from "../services/user.service";
 import { Request, Response } from "express";
 import { IUser } from "../models/user.model";
@@ -15,6 +18,8 @@ import { get, omit } from "lodash";
 import { createAccesToken, createRefreshToken } from "../jwtUtils/jwtWrapper";
 import { createSession, invalidateSession} from "../services/session.service";
 import log from "../logging/logger";
+import { IReport } from "../models/report.model";
+import { IGlobal } from "../models/global.model";
 
 export async function getAllUsersHandler(req: Request, res: Response) {
   const users: any = await getUsers();
@@ -167,3 +172,27 @@ export async function testingHandler2(req: Request, res: Response) {
 
   res.json({ ...user, lavidaesdura: true }).status(200);
 }
+
+export async function createReport(req: Request, res: Response) {
+  const report = req.body as IReport
+  const reportCreated = await createNewReport(report);
+  if (reportCreated != undefined) {
+    res.status(200).json(reportCreated);
+    return 
+  } 
+  res.status(405).send({message: "Te has creado un report"});
+
+}
+
+export async function getReports(req: Request, res: Response) {
+  const reports: any = await getAllReports();
+  res.status(200).json(reports);
+  
+  }
+
+  export async function getGlobalUser(req: Request, res: Response) { 
+ 
+    const global: IGlobal = {} as IGlobal
+    global.global = await getGlobal();
+    res.status(200).json(global); 
+  }

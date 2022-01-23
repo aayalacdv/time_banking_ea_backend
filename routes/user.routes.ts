@@ -1,9 +1,10 @@
 import { Router } from 'express'; 
-import { createUserHandler, deleteUserByIdHandler, getAllUsersHandler, getUserByIdHandler, googleLoginHandler, loginHandler, logOutHandler, updateUserHandler } from '../src/controller/user.controller';
-import { requeriesUser } from '../src/middleware/requiresUser';
+import { createReport, createUserHandler, deleteUserByIdHandler, getAllUsersHandler, getGlobalUser, getReports, getUserByIdHandler, googleLoginHandler, loginHandler, logOutHandler, updateUserHandler } from '../src/controller/user.controller';
+//import { requeriesUser } from '../src/middleware/requiresUser';
 import { validateUser } from '../src/middleware/user.validate';
 import { userSchema } from '../src/schemas/user.schema';
 import passport from 'passport';
+import { getAllReports } from '../src/services/user.service';
 
 const router = Router();  
 
@@ -21,9 +22,14 @@ router.post("/login",loginHandler);
 //Get user by Id
 router.get("/:id", getUserByIdHandler);
 
+// router.get("/global", getGlobalUser); 
+
+// router.get("/report", getReports);
+
+// router.post("/report", createReport);
 
 //Operations requiring user
-router.use(requeriesUser); 
+ // router.use(requeriesUser); 
 
 //Logout User
 router.delete("/logout",logOutHandler);

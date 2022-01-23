@@ -1,6 +1,7 @@
 import { IUser } from "./../models/user.model";
 import { User } from "../models/user.model";
 import log from "../logging/logger";
+import { IReport, Report } from "../models/report.model";
 
 //create user
 export async function createUser(user: IUser) {
@@ -80,4 +81,18 @@ export async function validatePassword(email: string, password: string) {
   const valid = await user.comparePasswords(password);
   if (valid) return true;
   return false;
+}
+
+export async function getGlobal() { //Servicio que me devuelve la tabla de los usuarios globales
+  return (await User.find()).length;
+}
+
+export async function getAllReports() {
+  return Report.find();
+}
+
+export async function createNewReport(report: IReport) {
+  return Report.create(report).catch((error: any) => {
+    log.error("Error creating report");
+  });
 }

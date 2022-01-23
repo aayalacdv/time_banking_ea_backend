@@ -19,7 +19,7 @@ setUpPassport();
 app.use(cors()); 
 app.use(morgan('combined')); 
 app.use(cookieParser()); 
-app.use(deserializeUser); 
+// app.use(deserializeUser); 
 app.use(express.json()); 
 app.use(express.urlencoded({extended: false })); 
 
