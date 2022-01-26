@@ -36,7 +36,7 @@ app.use(morgan("combined"));
 app.use(cookieParser());
 app.use(deserializeUser);
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true}));
 
 app.listen(port, host, () => {
   connect();

@@ -14,7 +14,7 @@ export interface Service extends Document {
 }
 
 const serviceSchema = new Schema<Service>({
-  username: { type: String, required: true },
+  username: { type: String, required: true , ref:'User'},
   img_url: { type: String, unique: false},
   description: { type: String, required: true },
   time_cost: { type: Number, required: true },

@@ -19,6 +19,7 @@ export async function deserializeUser(
   next: NextFunction
 ) {
 
+  console.log(req.cookies);
   //get the access token
   const { accessToken } = req.cookies;
 
@@ -72,7 +73,7 @@ export async function deserializeUser(
 
       //@ts-ignore
       req.user = user;
-
+      console.log(req.user);
       return next();
     }
   }

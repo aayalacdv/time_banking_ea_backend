@@ -3,7 +3,8 @@ import { createUserHandler, deleteUserByIdHandler, getAllUsersHandler, getUserBy
 import { requeriesUser } from '../src/middleware/requiresUser';
 import { validateUser } from '../src/middleware/user.validate';
 import { userSchema } from '../src/schemas/user.schema';
-import upload from '../src/multer/multer.setup';
+import upload, { uploadService } from '../src/multer/multer.setup';
+import { addCommentHandler, addRatingHandler, buyServiceHandler, createServiceHandler } from '../src/controller/service.controller';
 
 const router = Router();  
 
@@ -34,5 +35,9 @@ router.put("/profilepic/:id", upload.single('profilePicture'), updateProfilePict
 
 //Delete user by Id
 router.delete("/:id", deleteUserByIdHandler);
+router.post('/serv',uploadService.single('picture'),createServiceHandler); 
+router.put('/serv/rating/:id',addRatingHandler); 
+router.put('/serv/comment/:id',addCommentHandler); 
+router.put('/serv/buy/:servId/:userId',buyServiceHandler); 
 
 export default router; 

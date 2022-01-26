@@ -115,9 +115,9 @@ export async function loginHandler(req: Request, res: Response) {
 }
 
 export async function googleAuthHandler(req: Request, res: Response) {
-  const {email,name, googleId} = req.body; 
+  const {email,name, googleId, imageUrl } = req.body; 
 
-  let user: any = await createUserFromGoogle(name,googleId,email);
+  let user: any = await createUserFromGoogle(name,googleId,email,imageUrl);
 
   const session: any = await createSession(user._id);
 

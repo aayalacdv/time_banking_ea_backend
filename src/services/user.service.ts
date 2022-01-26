@@ -12,7 +12,8 @@ export async function createUser(user: IUser) {
 export async function createUserFromGoogle(
   username: string,
   googleId: string,
-  email: String
+  email: String,
+  imageUrl : String
 ) {
   //encontramos si existe un usuario con el mismo googleid
 
@@ -27,6 +28,7 @@ export async function createUserFromGoogle(
       email: email,
       password: "ajlsfhljñsdfhjlsdafhf8ohwerrkljhp78921089u31209sdjlkshfo",
       googleId: googleId,
+      imageUrl: imageUrl
     }).catch((error) => {
       log.error("Error creating user from google");
     });
@@ -72,6 +74,8 @@ export async function updateUser(id: string, user: IUser) {
     log.error("Error updating user");
   });
 }
+
+
 
 //validate password
 export async function validatePassword(email: string, password: string) {
